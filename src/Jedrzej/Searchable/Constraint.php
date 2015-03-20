@@ -74,7 +74,12 @@ class Constraint
      */
     public function apply(Builder $builder, $field)
     {
-        if ($this->operator == Constraint::OPERATOR_IN) {
+        if (strpos($field,'.') !== false) {
+            list($model,$field) = explode('.',$field);
+            $builder->whereHas($model,function($query) use($field) {
+                $this->apply($query, $field);
+            });
+        } elseif ($this->operator == Constraint::OPERATOR_IN) {
             $builder->whereIn($field, $this->value);
         } elseif ($this->operator == Constraint::OPERATOR_NOT_IN) {
             $builder->whereNotIn($field, $this->value);
