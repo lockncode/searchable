@@ -74,8 +74,8 @@ class Constraint
      */
     public function apply(Builder $builder, $field)
     {
-        if (strpos($field,'.') !== false) {
-            list($model,$field) = explode('.',$field);
+        if (strpos($field,':') !== false) {
+            list($model,$field) = explode(':',$field);
             $builder->whereHas($model,function($query) use($field) {
                 $this->apply($query, $field);
             });
